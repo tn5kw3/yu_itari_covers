@@ -896,19 +896,30 @@ function rebuildUI() {
   render();
 }
 
-// Try to fetch latest covers from Apps Script API
+// 先顯示上次存下的歌單，避免打開時跳兩次
+const CACHE_KEY = 'yuCoversCache';
+try {
+  const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+  if (cached && cached.length) COVERS = cached;
+} catch (e) {}
+
+// 抓最新歌單，有變才重畫
 function loadFromSheet() {
   if (!SCRIPT_URL || SCRIPT_URL.includes('___REPLACE')) return;
   fetch(SCRIPT_URL + '?action=getCovers', { redirect: 'follow' })
     .then(r => r.json())
     .then(rows => {
-      if (rows && rows.length) { COVERS = rows; rebuildUI(); }
+      if (!rows || !rows.length) return;
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(rows)); } catch (e) {}
+      if (JSON.stringify(rows) === JSON.stringify(COVERS)) return;
+      COVERS = rows;
+      rebuildUI();
     })
     .catch(() => {});
 }
 
 // Init
-render();
+rebuildUI();
 loadFromSheet();
 </script>
 
