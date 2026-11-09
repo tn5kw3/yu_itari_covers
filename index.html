@@ -571,9 +571,9 @@ function openIgProfile(username, e) {
 
 function openIgReel(webUrl, e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
-  var m = webUrl.match(/\/(?:reel|reels|p)\/([A-Za-z0-9_-]+)/);
-  var url = m ? 'https://www.instagram.com/p/' + m[1] + '/' : webUrl;
   if (_isMobile && !_inIgBrowser) {
+    var m = webUrl.match(/\/(?:reel|reels|p)\/([A-Za-z0-9_-]+)/);
+    var url = m ? 'https://www.instagram.com/p/' + m[1] + '/' : webUrl;
     var a = document.createElement('a');
     a.href = url;
     a.target = '_blank';
@@ -582,7 +582,7 @@ function openIgReel(webUrl, e) {
     a.click();
     document.body.removeChild(a);
   } else {
-    window.open(url, '_blank');
+    window.open(webUrl, '_blank');
   }
 }
 
