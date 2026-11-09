@@ -29,6 +29,7 @@
 <script>
   if (/Instagram/i.test(navigator.userAgent)) {
     document.getElementById('igNotice').style.display = 'flex';
+    document.addEventListener('visibilitychange', function () { if (document.hidden) window.close(); });
   }
 </script>
 <style>
