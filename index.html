@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>游幃至 Yu Itari</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+</head>
+<body>
+<style>
+/* Unified palette — no gradients, same in all modes */
+:root {
+  --bg: #1B2A4A;
+  --bg-elevated: #223458;
+  --bg-card: #152240;
+  --bg-card-hover: #1a2d50;
+  --fg: #E1AD01;
+  --fg-dim: #FFFFFF;
+  --fg-muted: #FFFFFF;
+  --accent: #F5F3EE;
+  --accent-dim: rgba(245,243,238,0.15);
+  --accent-glow: rgba(245,243,238,0.25);
+  --border: #2a3d5e;
+  --danger: #e07a73;
+  --success: #7ec9a3;
+  --accent-text: #1B2A4A;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --font-display: 'Calibri', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+  --font-body: 'Microsoft JhengHei', '微軟正黑體', 'Calibri', sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--fg-muted); border-radius: 3px; }
+
+.container { max-width: 900px; margin: 0 auto; padding-block: 48px 80px; }
+
+/* Hero */
+.hero { text-align: left; margin-bottom: 48px; }
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(28px, 6vw, 42px);
+  font-weight: 800; letter-spacing: -1px; margin-bottom: 8px;
+  color: var(--fg);
+}
+.hero-bio {
+  color: var(--fg-dim); font-size: 15px; max-width: 500px;
+  margin: 0; line-height: 1.7;
+}
+.hero-row {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.hero-left { flex: 1; min-width: 200px; }
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 12px 24px; border-radius: 24px;
+  background: var(--accent); color: var(--accent-text);
+  text-decoration: none; font-size: 15px;
+  font-family: var(--font-display); font-weight: 600;
+  transition: opacity 0.2s; white-space: nowrap; flex-shrink: 0;
+}
+.hero-cta:hover { opacity: 0.85; }
+.ig-links { display: flex; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.ig-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 24px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: #FFFFFF; text-decoration: none; font-size: 14px;
+  font-family: var(--font-display); font-weight: 500;
+  transition: all 0.2s;
+}
+.ig-link:hover { border-color: var(--accent); background: var(--accent-dim); }
+.ig-link svg { width: 18px; height: 18px; fill: #FFFFFF; }
+
+/* Stats bar */
+.stats {
+  display: flex; gap: 32px; justify-content: flex-start;
+  margin-bottom: 40px; flex-wrap: wrap;
+}
+.stat { text-align: left; }
+.stat-num {
+  font-family: var(--font-display); font-size: 28px; font-weight: 800;
+  color: var(--accent); font-variant-numeric: tabular-nums;
+}
+.stat-label { font-size: 12px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+/* Search */
+.search-wrap {
+  position: sticky; top: env(safe-area-inset-top, 0px);
+  z-index: 5; padding: 12px 0;
+  background: var(--bg); transition: box-shadow 0.3s;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--bg);
+}
+.search-wrap.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.search-box {
+  position: relative; max-width: 600px; margin: 0 auto;
+}
+.search-box input {
+  width: 100%; padding: 14px 48px 14px 44px;
+  background: var(--bg-elevated); border: 0 none; box-shadow: none;
+  border-radius: 28px; color: var(--fg-dim); font-size: 15px;
+  font-family: var(--font-body); outline: none;
+  transition: box-shadow 0.2s;
+}
+.search-box input:focus {
+  box-shadow: 0 0 0 2px var(--accent) !important;
+}
+.search-box input::placeholder { color: var(--fg-muted); }
+.search-icon {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--fg-muted); pointer-events: none;
+}
+.search-clear {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  background: var(--fg-muted); border: none; color: var(--bg);
+  width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+  font-size: 14px; display: none; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.search-clear.show { display: flex; }
+
+/* Tabs / filter */
+.tabs {
+  display: flex; gap: 8px; margin-bottom: 24px;
+  overflow-x: auto; padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0; padding: 8px 16px; border-radius: 20px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--fg-dim); font-size: 13px; cursor: pointer;
+  font-family: var(--font-display); font-weight: 500;
+  transition: all 0.2s; white-space: nowrap;
+}
+.tab:hover { border-color: var(--fg-muted); color: var(--fg); }
+.tab.active {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--accent-text); font-weight: 600;
+}
+.tab .count {
+  display: inline-block; margin-left: 4px;
+  font-size: 11px; opacity: 0.7;
+}
+
+/* Section headers */
+.section-header {
+  font-family: var(--font-display); font-size: 20px; font-weight: 700;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+}
+.section-header .line {
+  flex: 1; height: 1px; background: var(--border);
+}
+
+/* Cover grid */
+.cover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px; margin-bottom: 40px;
+}
+.cover-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); overflow: hidden;
+  transition: all 0.25s cubic-bezier(.4,0,.2,1);
+  cursor: pointer; position: relative;
+}
+.cover-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.card-visual {
+  height: 140px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-visual::after {
+  content: ''; position: absolute; inset: 0;
+  background: transparent;
+}
+.card-visual .play-icon {
+  position: absolute; z-index: 2;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.cover-card:hover .play-icon { opacity: 1; }
+.play-icon svg { width: 20px; height: 20px; fill: #fff; margin-left: 2px; }
+.card-body { padding: 14px 16px 16px; position: relative; z-index: 1; margin-top: 0; }
+.card-song {
+  font-family: var(--font-display); font-size: 15px; font-weight: 600;
+  margin-bottom: 4px; line-height: 1.3; text-transform: capitalize;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card-artist { font-size: 13px; color: var(--fg-dim); margin-bottom: 8px; }
+.card-date { font-size: 12px; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.card-ig {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--accent); text-decoration: none;
+  margin-top: 8px; font-weight: 500; transition: opacity 0.2s;
+}
+.card-ig:hover { opacity: 0.8; }
+.card-ig svg { width: 14px; height: 14px; fill: currentColor; }
+.card-new {
+  position: absolute; top: 10px; right: 10px; z-index: 3;
+  background: #E1AD01; color: #1B2A4A; font-size: 10px;
+  padding: 2px 8px; border-radius: 10px; font-weight: 600;
+  font-family: var(--font-display); letter-spacing: 0.5px;
+}
+
+/* No results */
+.no-results { text-align: center; padding: 60px 20px; display: none; }
+.no-results.show { display: block; }
+.no-results h3 {
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.no-results p { color: var(--fg-dim); font-size: 14px; margin-bottom: 24px; }
+.wish-form { max-width: 400px; margin: 0 auto; }
+.wish-input {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.wish-input input {
+  flex: 1; padding: 12px 16px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--fg); font-size: 14px; font-family: var(--font-body); outline: none;
+}
+.wish-input input:focus { border-color: var(--accent); }
+.wish-btn {
+  padding: 12px 20px; background: var(--accent); color: var(--accent-text);
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  font-family: var(--font-display); font-weight: 600; font-size: 14px;
+  transition: opacity 0.2s; white-space: nowrap;
+}
+.wish-btn:hover { opacity: 0.85; }
+.wish-list { margin-top: 16px; text-align: left; }
+.wish-item {
+  padding: 10px 14px; background: var(--bg-elevated);
+  border-radius: var(--radius-sm); margin-bottom: 6px;
+  font-size: 13px; display: flex; justify-content: space-between;
+  align-items: center; animation: fadeUp 0.3s ease;
+}
+.wish-item .wish-votes {
+  display: flex; align-items: center; gap: 4px;
+  color: var(--accent); font-size: 12px; cursor: pointer;
+}
+.wish-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--success); color: #000; padding: 10px 20px;
+  border-radius: 24px; font-size: 14px; font-weight: 500;
+  z-index: 100; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.wish-toast.show { opacity: 1; }
+
+/* Recommendations */
+.recs { margin-top: 40px; }
+.recs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.rec-card {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px;
+  transition: all 0.2s; cursor: pointer;
+}
+.rec-card:hover { border-color: var(--accent); background: var(--bg-card-hover); }
+.rec-song {
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  margin-bottom: 2px; text-transform: capitalize;
+  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
+.rec-artist { font-size: 12px; color: var(--fg-dim); }
+
+/* Artist section */
+.artist-section { margin-bottom: 48px; }
+.artist-banner {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px; background: var(--bg-card); border-radius: var(--radius-md);
+  border: 1px solid var(--border); margin-bottom: 16px;
+}
+.artist-icon {
+  width: 52px; height: 52px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 800; font-size: 20px;
+  color: #fff; flex-shrink: 0;
+}
+.artist-info h2 {
+  font-family: var(--font-display); font-size: 18px; font-weight: 700;
+}
+.artist-info span { font-size: 13px; color: var(--fg-dim); }
+
+/* Lesson inquiry */
+.lesson-section { margin-top: 60px; }
+.lesson-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px; text-align: center;
+}
+.lesson-icon { font-size: 40px; margin-bottom: 12px; }
+.lesson-card h3 {
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.lesson-card p {
+  color: var(--fg-dim); font-size: 14px; max-width: 400px;
+  margin: 0 auto 24px; line-height: 1.7;
+}
+.lesson-form {
+  max-width: 400px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.lesson-form input, .lesson-form textarea {
+  padding: 12px 16px; background: var(--bg-elevated);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--fg); font-size: 14px; font-family: var(--font-body);
+  outline: none; resize: vertical;
+}
+.lesson-form input:focus, .lesson-form textarea:focus { border-color: var(--accent); }
+.lesson-note {
+  color: var(--fg-muted); font-size: 12px; margin: 0 auto 16px;
+  max-width: 400px; line-height: 1.6;
+}
+.lesson-btn {
+  padding: 14px 24px; background: var(--accent); color: var(--accent-text);
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  font-family: var(--font-display); font-weight: 600; font-size: 15px;
+  transition: opacity 0.2s;
+}
+.lesson-btn:hover { opacity: 0.85; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 32px 0; margin-top: 40px;
+  border-top: 1px solid var(--border); color: var(--fg-muted); font-size: 12px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeUp 0.35s ease forwards; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .cover-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .card-visual { height: 100px; }
+  .card-body { padding: 10px 12px 14px; }
+  .card-song { font-size: 13px; }
+  .stats { gap: 20px; }
+  .recs-grid { grid-template-columns: 1fr 1fr; }
+  .container { padding-block: 32px 60px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+
+<div class="container" id="app">
+  <!-- Hero -->
+  <section class="hero">
+    <h1 id="heroName">游幃至 Yu Itari</h1>
+    <div class="hero-row">
+      <div class="hero-left">
+        <p class="hero-bio" id="heroBio">歡迎在這裡查看我的所有翻唱作品<br>若有意願跟我學唱歌也可以按旁邊的按鈕快速跟我聯絡！</p>
+      </div>
+      <a href="#lessonSection" class="hero-cta" onclick="event.preventDefault();var el=document.getElementById('lessonSection');var y=el.getBoundingClientRect().top+window.scrollY-80;window.scrollTo({top:y,behavior:'smooth'})">🎙 我想學唱歌</a>
+    </div>
+    <div class="ig-links">
+      <a href="https://www.instagram.com/tn5k_w3/" target="_blank" rel="noopener" class="ig-link">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        @tn5k_w3
+      </a>
+      <a href="https://www.instagram.com/yu_itari/" target="_blank" rel="noopener" class="ig-link">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        @yu_itari
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="statTotal">122</div><div class="stat-label">covers</div></div>
+    <div class="stat"><div class="stat-num" id="statArtists">0</div><div class="stat-label">artists</div></div>
+    <div class="stat"><div class="stat-num" id="statSince">2022</div><div class="stat-label">since</div></div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap" id="searchWrap">
+    <div class="search-box">
+      <span class="search-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input type="text" id="searchInput" placeholder="搜尋歌名或歌手⋯" autocomplete="off">
+      <button class="search-clear" id="searchClear">&times;</button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs"></div>
+
+  <!-- Main content area -->
+  <div id="mainContent"></div>
+
+  <!-- No results -->
+  <div class="no-results" id="noResults">
+    <h3>🎤 還沒有翻唱過這首歌</h3>
+    <p id="noResultsText">但你可以許願，也許下一首就是它！</p>
+    <div class="wish-form">
+      <div class="wish-input">
+        <input type="text" id="wishInput" placeholder="輸入你想聽的歌⋯">
+        <button class="wish-btn" id="wishBtn">許願 ✨</button>
+      </div>
+      <div class="wish-list" id="wishList"></div>
+    </div>
+    <div id="noResultRecs"></div>
+  </div>
+
+  <!-- Lesson Inquiry -->
+  <div class="lesson-section" id="lessonSection">
+    <div class="lesson-card">
+      <div class="lesson-icon">🎙</div>
+      <h3>想學唱歌？</h3>
+      <p>如果你也想唱出這樣的聲音，歡迎來聊聊！<br>新手友善，沒基礎也歡迎</p>
+      <p class="lesson-note">送出詢問後我會盡快聯繫你，Line 請記得開啟陌生訊息喔</p>
+      <div class="lesson-form">
+        <input type="text" id="lessonName" placeholder="你的名字">
+        <input type="text" id="lessonContact" placeholder="聯絡方式（IG / Line / Email）">
+        <textarea id="lessonMsg" placeholder="想學什麼？有什麼目標？" rows="3"></textarea>
+        <button class="lesson-btn" id="lessonBtn">送出詢問 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">Built with 受不了一直問我有沒有cover過某首歌的朋友</div>
+</div>
+
+<div class="wish-toast" id="wishToast">已送出許願！🎵</div>
+
+<script>
+// ===== 你的 Apps Script 部署網址（部署後把下面這行換掉）=====
+const SCRIPT_URL = '___REPLACE_WITH_YOUR_APPS_SCRIPT_URL___';
+
+let COVERS = [{"song":"The Kill","artist":"30 Seconds to Mars","date":"2026-06-25","link":"https://www.instagram.com/reel/DaATb31zcoA/"},{"song":"RASEN","artist":"9Lana","date":"2026-10-03","link":"https://www.instagram.com/reel/DeBpgPzTehx/"},{"song":"カタオモイ","artist":"Aimer","date":"2026-09-05","link":"https://www.instagram.com/reel/Dc5cPyyTeVw/"},{"song":"Akudama","artist":"Alpha Wolf","date":"2024-08-15","link":"https://www.instagram.com/reel/C-riy6sSewS/"},{"song":"Hereafter","artist":"Architects","date":"2024-08-01","link":"https://www.instagram.com/reel/C-Ht8RgSbcv/"},{"song":"Blackhole","artist":"Architects","date":"2026-05-12","link":"https://www.instagram.com/reel/DYPAcyIzVkX/"},{"song":"doomsday","artist":"Architects","date":"2026-05-16","link":"https://www.instagram.com/reel/DYYvMDlN7TF/"},{"song":"Animals","artist":"Architects","date":"2026-06-22","link":"https://www.instagram.com/reel/DZ4wwvKNf78/"},{"song":"beat Arrival","artist":"Architects x Poppy type","date":"2026-09-21","link":"https://www.instagram.com/reel/DdiXkfpTOSt/"},{"song":"Artificial Suicide","artist":"Bad Omens","date":"2026-02-14","link":"https://www.instagram.com/reel/DUubWJUjzOX/"},{"song":"Nowhere To Go (Part 1)","artist":"Bad Omens","date":"2026-06-04","link":"https://www.instagram.com/reel/DZKK1wJtCHD/"},{"song":"Nowhere To Go (Part 2)","artist":"Bad Omens","date":"2026-06-08","link":"https://www.instagram.com/reel/DZUNzWrN1QV/"},{"song":"Just Pretend","artist":"Bad Omens","date":"2026-07-12","link":"https://www.instagram.com/reel/DasnP1PzISC/"},{"song":"THE DEATH OF PEACE OF MIND","artist":"Bad Omens","date":"2026-08-25","link":"https://www.instagram.com/reel/Dcdc5p0zQqi/"},{"song":"Specter","artist":"Bad Omens","date":"2026-09-11","link":"https://www.instagram.com/reel/DdJJx4YxrP4/"},{"song":"If I'm There","artist":"Bad Omens","date":"2026-10-07","link":"https://www.instagram.com/reel/DeMEJyrTN_I/"},{"song":"Enemy","artist":"Brand of Sacrifice","date":"2026-02-01","link":"https://www.instagram.com/reel/DUN5AyOj5d3/"},{"song":"Oh No","artist":"Bring Me the Horizon","date":"2024-05-15","link":"https://www.instagram.com/reel/C6-cDj0S_mO/"},{"song":"seen it all before","artist":"Bring Me the Horizon","date":"2026-02-11","link":"https://www.instagram.com/reel/DUna0yWDyVt/"},{"song":"Doomed","artist":"Bring Me the Horizon","date":"2026-02-28","link":"https://www.instagram.com/reel/DVSRHSID0fR/"},{"song":"DArkSide","artist":"Bring Me the Horizon","date":"2026-04-29","link":"https://www.instagram.com/reel/DXt0dbNjdV1/"},{"song":"Can You Feel My Heart","artist":"Bring Me the Horizon","date":"2026-05-08","link":"https://www.instagram.com/reel/DYEFxcwtwpY/"},{"song":"dear diary","artist":"Bring Me the Horizon","date":"2026-05-10","link":"https://www.instagram.com/reel/DYJNrniz-9s/"},{"song":"AmeN","artist":"Bring Me the Horizon","date":"2026-07-18","link":"https://www.instagram.com/reel/Da7SCLXtWm6/"},{"song":"liMOusIne (feat. AURORA)","artist":"Bring Me the Horizon","date":"2026-09-04","link":"https://www.instagram.com/reel/Dc3ISWsTx_Y/"},{"song":"Dehumanized","artist":"Bring Me the Horizon","date":"2026-10-23","link":"https://www.instagram.com/reel/De1iXrpzROZ/"},{"song":"Suffocating","artist":"Bring Me the Horizon x PRESIDENT Rock Type Beat","date":"2026-08-29","link":"https://www.instagram.com/reel/DcnXFoQN4EE/"},{"song":"hostage","artist":"Chelsea Grin","date":"2024-08-25","link":"https://www.instagram.com/reel/C_D1h_1SsJb/"},{"song":"MAYDAY (Part 1)","artist":"Coldrain","date":"2026-05-28","link":"https://www.instagram.com/reel/DY4NKluSbdr/"},{"song":"MAYDAY (Part 2)","artist":"Coldrain","date":"2026-05-30","link":"https://www.instagram.com/reel/DY8uHhATrIK/"},{"song":"Lost In Forever (Part 1)","artist":"Crystal Lake","date":"2024-08-08","link":"https://www.instagram.com/reel/C-aXznqyag1/"},{"song":"Lost In Forever (Part 2)","artist":"Crystal Lake","date":"2024-08-08","link":"https://www.instagram.com/reel/C-aZ7_sSYcc/"},{"song":"AEON","artist":"Crystal Lake","date":"2026-03-08","link":"https://www.instagram.com/reel/DVn1i8DDT2V/"},{"song":"devilcry","artist":"Crystal Lake","date":"2026-03-14","link":"https://www.instagram.com/reel/DV2kqdwDu2b/"},{"song":"Disobey","artist":"Crystal Lake","date":"2026-06-30","link":"https://www.instagram.com/reel/DaMeuNCTmHP/"},{"song":"ritual. (feat. PALEDUSK)","artist":"CVLTE","date":"2026-09-14","link":"https://www.instagram.com/reel/DdRLLX7zRSl/"},{"song":"Donna","artist":"Darko Us","date":"2024-09-06","link":"https://www.instagram.com/reel/C_kqKWLyidq/"},{"song":"Creature In the Black Night","artist":"Dayseeker","date":"2026-07-21","link":"https://www.instagram.com/reel/DbDdxlVzRBr/"},{"song":"Sleeptalk","artist":"Dayseeker","date":"2026-07-23","link":"https://www.instagram.com/reel/DbIZsakz79A/"},{"song":"High Stake Club","artist":"DEATHNYANN","date":"2024-09-22","link":"https://www.instagram.com/reel/DANGZxEy8CS/"},{"song":"SUCK TAIPEI","artist":"Diepression","date":"2026-10-17","link":"https://www.instagram.com/reel/Dely81gTlUE/"},{"song":"too many scars","artist":"DIESECT","date":"2026-01-14","link":"https://www.instagram.com/reel/DTfs0rtj72y/"},{"song":"True Believers","artist":"DON BROCO","date":"2026-08-03","link":"https://www.instagram.com/reel/Dbk1cLINETA/"},{"song":"True Believers (Feat. Sam Carter)","artist":"DON BROCO","date":"2026-08-07","link":"https://www.instagram.com/reel/DbvIrwstPfn/"},{"song":"Godblast","artist":"Earthists","date":"2024-07-19","link":"https://www.instagram.com/reel/C9mLCGsyT9V/"},{"song":"gore of being","artist":"ERRA","date":"2026-06-20","link":"https://www.instagram.com/reel/DZzNzI6Nd_x/"},{"song":"stelliform","artist":"ERRA","date":"2026-09-27","link":"https://www.instagram.com/reel/Ddx2abcz4iN/"},{"song":"God of Fire","artist":"Fit for a King","date":"2022-08-06","link":"https://www.instagram.com/tv/Cg6g7UgDxvF/"},{"song":"Location Unknown","artist":"HONNE","date":"2026-06-05","link":"https://www.instagram.com/reel/DZNIIXGhAqd/"},{"song":"Visceral","artist":"I Prevail","date":"2026-01-21","link":"https://www.instagram.com/reel/DTxXyNMj1HS/"},{"song":"Violent Nature","artist":"I Prevail","date":"2026-01-28","link":"https://www.instagram.com/reel/DUDe4thD2ZV/"},{"song":"hurricane","artist":"I Prevail","date":"2026-07-19","link":"https://www.instagram.com/reel/Da9ed60z_Gm/"},{"song":"Scars","artist":"I Prevail","date":"2026-11-04","link":"https://www.instagram.com/reel/DfRvEDPzvlw/"},{"song":"Anomaly","artist":"I See Stars","date":"2026-03-04","link":"https://www.instagram.com/reel/DVdh1HTj9M_/"},{"song":"一途","artist":"King Gnu","date":"2026-09-18","link":"https://www.instagram.com/reel/DdbwUMwTJZc/"},{"song":"厄災","artist":"KNOSIS","date":"2024-07-24","link":"https://www.instagram.com/reel/C9zFyl7yaI3/"},{"song":"DOKUNUMA","artist":"KNOSIS","date":"2026-04-01","link":"https://www.instagram.com/reel/DWlj0jgDWlE/"},{"song":"lying from you","artist":"Linkin Park","date":"2026-06-27","link":"https://www.instagram.com/reel/DaE3LDTzDFu/"},{"song":"Faint","artist":"Linkin Park","date":"2026-06-29","link":"https://www.instagram.com/reel/DaIuXRUzIUS/"},{"song":"Crawling","artist":"Linkin Park","date":"2026-07-04","link":"https://www.instagram.com/reel/DaYA7dMTfv6/"},{"song":"Is It Really You? & Pass Won't Leave My Bed","artist":"Loathe x Joji","date":"2026-08-31","link":"https://www.instagram.com/reel/Dcs1OWxz-bN/"},{"song":"命に嫌われている","artist":"Majiko","date":"2026-01-05","link":"https://www.instagram.com/reel/DTIJDJ5kyJn/"},{"song":"Frosted Leaves","artist":"Motifhive","date":"2026-09-25","link":"https://www.instagram.com/reel/Dds_f-qTHTd/"},{"song":"Afraid of the Dark","artist":"Motionless In White","date":"2026-06-17","link":"https://www.instagram.com/reel/DZrs3e4tWL4/"},{"song":"REVIVER","artist":"My First Story","date":"2025-07-25","link":"https://www.instagram.com/reel/DMhVIKBv0P-/"},{"song":"Devil inside","artist":"NOCTURNAL BLOODLUST","date":"2026-08-11","link":"https://www.instagram.com/reel/Db5M0N7N2us/"},{"song":"Cyanide","artist":"Normandie","date":"2026-02-25","link":"https://www.instagram.com/reel/DVLo9gXj2Qt/"},{"song":"All For Nothing","artist":"Novelists","date":"2026-11-06","link":"https://www.instagram.com/reel/DfWeudxzhUO/"},{"song":"生存專家","artist":"OBSESS","date":"2026-09-22","link":"https://www.instagram.com/reel/DdlCSM0zrgv/"},{"song":"完全感覺Dreamer","artist":"ONE OK ROCK","date":"2026-04-20","link":"https://www.instagram.com/reel/DXW3CklExNa/"},{"song":"Cry Out","artist":"ONE OK ROCK","date":"2026-08-09","link":"https://www.instagram.com/reel/Dbzj0xuz9Zj/"},{"song":"Delusion:All","artist":"ONE OK ROCK","date":"2026-08-17","link":"https://www.instagram.com/reel/DcIx98mTcsu/"},{"song":"Party's Over","artist":"ONE OK ROCK","date":"2026-08-19","link":"https://www.instagram.com/reel/DcN7H09TLlr/"},{"song":"Bombs Away","artist":"ONE OK ROCK","date":"2026-08-27","link":"https://www.instagram.com/reel/Dcic4cQTwO4/"},{"song":"Puppets Can't Control You","artist":"ONE OK ROCK","date":"2026-09-01","link":"https://www.instagram.com/reel/DcvreZVT20S/"},{"song":"Tiny Pieces","artist":"ONE OK ROCK","date":"2026-09-07","link":"https://www.instagram.com/reel/Dc--NbnzIHh/"},{"song":"Nobody's Home","artist":"ONE OK ROCK","date":"2026-09-16","link":"https://www.instagram.com/reel/DdWHFrnh9wc/"},{"song":"Liar","artist":"ONE OK ROCK","date":"2026-10-01","link":"https://www.instagram.com/reel/Dd8wkkOzQK2/"},{"song":"C.U.R.I.O.S.I.T.Y","artist":"ONE OK ROCK","date":"2026-10-05","link":"https://www.instagram.com/reel/DeGgzYJzA9O/"},{"song":"Take What You Want","artist":"ONE OK ROCK","date":"2026-10-10","link":"https://www.instagram.com/reel/DeTxpmQTUPE/"},{"song":"Deeper Deeper","artist":"ONE OK ROCK","date":"2026-10-19","link":"https://www.instagram.com/reel/Deq1fYxTNN1/"},{"song":"Start Again","artist":"ONE OK ROCK","date":"2026-10-28","link":"https://www.instagram.com/reel/DfCXUaPTsy9/"},{"song":"Renegades","artist":"ONE OK ROCK","date":"2026-07-19","link":"https://www.instagram.com/reel/Da-HnqVhJ3Z/"},{"song":"HUGs (Part 1)","artist":"PALEDUSK","date":"2026-05-18","link":"https://www.instagram.com/reel/DYcvVzUz8aa/"},{"song":"HUGs (Part 2)","artist":"PALEDUSK","date":"2026-05-22","link":"https://www.instagram.com/reel/DYoJ3EQte6F/"},{"song":"Rumble","artist":"PALEDUSK","date":"2026-08-23","link":"https://www.instagram.com/reel/DcYG3EDTX6L/"},{"song":"Misery Business","artist":"Paramore","date":"2026-07-10","link":"https://www.instagram.com/reel/Dam7YP6ThOB/"},{"song":"masochist","artist":"Polaris","date":"2026-07-08","link":"https://www.instagram.com/reel/Dahxxi7Tlfz/"},{"song":"WITHOUT YOU","artist":"Polaris","date":"2026-10-14","link":"https://www.instagram.com/reel/Ded6BMxTPII/"},{"song":"Emergence","artist":"Sleep Token","date":"2026-01-11","link":"https://www.instagram.com/reel/DTWosVxDzMG/"},{"song":"Gethsemane","artist":"Sleep Token","date":"2026-09-29","link":"https://www.instagram.com/reel/Dd3fO8Jz0j4/"},{"song":"Take Me Back To Eden","artist":"Sleep Token","date":"2026-10-22","link":"https://www.instagram.com/reel/DeyG6kXTtEd/"},{"song":"Jaded","artist":"Spiritbox","date":"2024-04-28","link":"https://www.instagram.com/reel/C6ReVCsyKcz/"},{"song":"You Only Live Once","artist":"Suicide Silence","date":"2026-11-03","link":"https://www.instagram.com/reel/DfO6yBYTE2L/"},{"song":"Boy","artist":"Ten56","date":"2022-07-08","link":"https://www.instagram.com/tv/CfwV-b1Dvi6/"},{"song":"Forgotten","artist":"The Plot In You","date":"2024-05-25","link":"https://www.instagram.com/reel/C7Y_2TDSVm5/"},{"song":"Been Here Before","artist":"The Plot In You","date":"2024-10-14","link":"https://www.instagram.com/reel/DBHDiqdyWtD/"},{"song":"FEEL NOTHING","artist":"The Plot In You","date":"2026-01-08","link":"https://www.instagram.com/reel/DTPHigaj6Mt/"},{"song":"Left Behind","artist":"The Plot In You","date":"2026-01-17","link":"https://www.instagram.com/reel/DTmG6n5DxCk/"},{"song":"revolver (Part 1)","artist":"Thornhill","date":"2026-02-18","link":"https://www.instagram.com/reel/DU4njDhD4IH/"},{"song":"revolver (Part 2)","artist":"Thornhill","date":"2026-02-21","link":"https://www.instagram.com/reel/DVANVs0kqRW/"},{"song":"Casanova","artist":"Thornhill","date":"2026-10-16","link":"https://www.instagram.com/reel/DejgbTSJlIA/"},{"song":"Destroyer of Dreams","artist":"Thy Art is Murder","date":"2026-01-26","link":"https://www.instagram.com/reel/DT-cLjVD303/"},{"song":"If The Sun Burns Out Tonight","artist":"VALORANT","date":"2026-11-08","link":"https://www.instagram.com/reel/DfcEmFUTBMU/"},{"song":"逆光","artist":"Vaundy","date":"2026-11-02","link":"https://www.instagram.com/reel/DfL-7-eTvPR/"},{"song":"呼び声","artist":"Vaundy","date":"2026-10-29","link":"https://www.instagram.com/reel/DfErcHbzosc/"},{"song":"前前前世","artist":"Vaundy","date":"2026-10-27","link":"https://www.instagram.com/reel/De_SzGyTp7Z/"},{"song":"飛ぶ時","artist":"Vaundy","date":"2026-10-26","link":"https://www.instagram.com/reel/De9BwtRzv-b/"},{"song":"裸の勇者","artist":"Vaundy","date":"2026-09-26","link":"https://www.instagram.com/reel/DdvO2SKTPww/"},{"song":"Uh YaYa","artist":"vianova","date":"2026-07-06","link":"https://www.instagram.com/reel/Dab4FQ2zNyt/"},{"song":"Low","artist":"Wage War","date":"2026-07-14","link":"https://www.instagram.com/reel/DaxOecCTACh/"},{"song":"Godspeed","artist":"Wage War","date":"2026-07-17","link":"https://www.instagram.com/reel/Da5fRt1zQzi/"},{"song":"I dementia","artist":"Whitechapel","date":"2026-04-15","link":"https://www.instagram.com/reel/DXJuc-HjYIL/"},{"song":"Hymns in Dissonance","artist":"Whitechapel","date":"2026-08-05","link":"https://www.instagram.com/reel/Dbpw3FCteKj/"},{"song":"Yōkai","artist":"Within Destruction","date":"2022-07-15","link":"https://www.instagram.com/tv/CgCETtZDGvL/"},{"song":"盜作","artist":"Yorushika","date":"2026-11-05","link":"https://www.instagram.com/reel/DfUjVMYzsKS/"},{"song":"あぶく","artist":"Yorushika","date":"2026-06-27","link":"https://www.instagram.com/reel/DaGDm14zN9z/"},{"song":"秒針を噛む","artist":"ZUTOMAYO","date":"2026-05-28","link":"https://www.instagram.com/reel/DY3m-P-zkcp/"},{"song":"雨愛","artist":"帕崎拉","date":"2026-04-07","link":"https://www.instagram.com/reel/DW1ANlhk0zQ/"},{"song":"在你和天空之間","artist":"福夢FUMON","date":"2026-05-14","link":"https://www.instagram.com/reel/DYTkMb9Bwxu/"},{"song":"想你點菸","artist":"隨性樂團","date":"2026-10-12","link":"https://www.instagram.com/reel/DeZAueATeef/"},{"song":"第二星系","artist":"薄暮EVENFALL","date":"2026-05-20","link":"https://www.instagram.com/reel/DYi_im4Txtj/"}];
+
+// Genre mapping for recommendations
+const GENRE_MAP = {
+  'metalcore': ['Architects','Bad Omens','Crystal Lake','I Prevail','Wage War','Fit for a King','Polaris','Novelists','ERRA','Thornhill','Coldrain','DON BROCO','Alpha Wolf','Normandie','CVLTE'],
+  'post-hardcore': ['Bring Me the Horizon','Dayseeker','Sleep Token','Spiritbox','The Plot In You','Motionless In White','Paramore','Loathe x Joji','I See Stars','Linkin Park'],
+  'deathcore': ['Chelsea Grin','Thy Art is Murder','Within Destruction','Brand of Sacrifice','Suicide Silence','Whitechapel','NOCTURNAL BLOODLUST','DEATHNYANN','Darko Us','Ten56','DIESECT','Diepression'],
+  'jpop-jrock': ['ONE OK ROCK','Vaundy','Yorushika','ZUTOMAYO','King Gnu','Aimer','Majiko','My First Story','KNOSIS','9Lana','PALEDUSK','Motifhive','Earthists','OBSESS','Coldrain'],
+  'tw-rock': ['帕崎拉','福夢FUMON','隨性樂團','薄暮EVENFALL','Diepression'],
+};
+
+function getGenres(artist) {
+  const genres = [];
+  for (const [g, artists] of Object.entries(GENRE_MAP)) {
+    if (artists.some(a => a.toLowerCase() === artist.toLowerCase())) genres.push(g);
+  }
+  return genres;
+}
+
+function getRelated(cover, exclude = [], count = 6) {
+  const genres = getGenres(cover.artist);
+  const sameArtist = COVERS.filter(c => c.artist.toLowerCase() === cover.artist.toLowerCase() && c.song !== cover.song && !exclude.includes(c.song));
+  const sameGenre = COVERS.filter(c => {
+    if (c.song === cover.song || sameArtist.includes(c)) return false;
+    if (exclude.includes(c.song)) return false;
+    const cGenres = getGenres(c.artist);
+    return cGenres.some(g => genres.includes(g));
+  });
+  const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+  return [...shuffle(sameArtist), ...shuffle(sameGenre)].slice(0, count);
+}
+
+const ARTIST_PALETTE = [
+  '#D96C2C','#274C56','#E7A84E','#3E8E7E','#9E5A3C',
+  '#4A7C6F','#B8860B','#5B8A72','#C4956A','#34595E',
+  '#C07830','#2E6B5A','#8B6F47','#6A8E7C','#F6E2B3',
+  '#3B6960','#A0764B','#6B4E3D','#D4943A','#7A6652'
+];
+const ARTIST_COLOR_OVERRIDE = {
+  'vaundy': '#D96C2C'
+};
+function hashColor(artist) {
+  const key = artist.toLowerCase();
+  if (ARTIST_COLOR_OVERRIDE[key]) return ARTIST_COLOR_OVERRIDE[key];
+  let h = 0;
+  for (let i = 0; i < key.length; i++) {
+    h = ((h << 5) - h + key.charCodeAt(i)) | 0;
+  }
+  return ARTIST_PALETTE[Math.abs(h) % ARTIST_PALETTE.length];
+}
+
+function isNew(dateStr) {
+  const d = new Date(dateStr);
+  const now = new Date();
+  return (now - d) < 14 * 24 * 60 * 60 * 1000;
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('zh-TW', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function createCoverCard(cover) {
+  const card = document.createElement('div');
+  card.className = 'cover-card fade-in';
+  const c1 = hashColor(cover.artist);
+  card.innerHTML = `
+    <div class="card-visual" style="background: ${c1}">
+      <div style="font-family:var(--font-display);font-weight:800;font-size:32px;color:rgba(255,255,255,0.08);letter-spacing:-2px;text-transform:uppercase;position:absolute;white-space:nowrap;">${cover.song}</div>
+      ${isNew(cover.date) ? '<span class="card-new">NEW</span>' : ''}
+      <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    </div>
+    <div class="card-body">
+      <div class="card-song">${escHtml(cover.song)}</div>
+      <div class="card-artist">${escHtml(cover.artist)}</div>
+      <div class="card-date">${formatDate(cover.date)}</div>
+      <a href="${cover.link}" target="_blank" rel="noopener" class="card-ig" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        觀看 Reels
+      </a>
+    </div>
+  `;
+  card.addEventListener('click', () => window.open(cover.link, '_blank'));
+  return card;
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// Build artist counts
+const artistCounts = {};
+COVERS.forEach(c => {
+  const key = c.artist;
+  artistCounts[key] = (artistCounts[key] || 0) + 1;
+});
+const topArtists = Object.entries(artistCounts).sort((a, b) => b[1] - a[1]);
+const uniqueArtists = topArtists.length;
+document.getElementById('statArtists').textContent = uniqueArtists;
+
+// Build tabs
+const tabsEl = document.getElementById('tabs');
+const allTab = document.createElement('div');
+allTab.className = 'tab active';
+allTab.textContent = '全部';
+allTab.dataset.filter = 'all';
+tabsEl.appendChild(allTab);
+
+const hotTab2 = document.createElement('div');
+hotTab2.className = 'tab';
+hotTab2.textContent = '熱門 🔥';
+hotTab2.dataset.filter = 'hot';
+tabsEl.appendChild(hotTab2);
+
+const HOT_SONGS = ['盜作','Cry Out','C.U.R.I.O.S.I.T.Y','Start Again','Deeper Deeper','Dehumanized','想你點菸','第二星系','SUCK TAIPEI'];
+
+topArtists.filter(([, c]) => c >= 3).forEach(([artist, count]) => {
+  const t = document.createElement('div');
+  t.className = 'tab';
+  t.innerHTML = `${escHtml(artist)} <span class="count">${count}</span>`;
+  t.dataset.filter = artist;
+  tabsEl.appendChild(t);
+});
+
+// State
+let currentFilter = 'all';
+let searchQuery = '';
+
+function getFiltered() {
+  let list = [...COVERS];
+  if (currentFilter === 'hot') {
+    return HOT_SONGS.map(s => list.find(c => c.song === s)).filter(Boolean);
+  }
+  if (currentFilter !== 'all') {
+    list = list.filter(c => c.artist === currentFilter);
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(c =>
+      c.song.toLowerCase().includes(q) ||
+      c.artist.toLowerCase().includes(q)
+    );
+  }
+  list.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return list;
+}
+
+function render() {
+  const filtered = getFiltered();
+  const main = document.getElementById('mainContent');
+  const noRes = document.getElementById('noResults');
+
+  if (filtered.length === 0 && searchQuery) {
+    main.innerHTML = '';
+    noRes.classList.add('show');
+    document.getElementById('noResultsText').textContent =
+      `找不到「${searchQuery}」相關的翻唱，但你可以許願讓他知道！`;
+    const noResultRecs = document.getElementById('noResultRecs');
+    noResultRecs.innerHTML = '';
+    const recs = [...COVERS].sort(() => Math.random() - 0.5).slice(0, 6);
+    renderRecs(noResultRecs, recs, '也許你會喜歡');
+    return;
+  }
+
+  noRes.classList.remove('show');
+
+  if (currentFilter !== 'all' && currentFilter !== 'hot' && !searchQuery) {
+    const artist = currentFilter;
+    const songs = filtered;
+    main.innerHTML = '';
+    const section = document.createElement('div');
+    section.className = 'artist-section';
+    const c1 = hashColor(artist);
+    section.innerHTML = `
+      <div class="artist-banner">
+        <div class="artist-icon" style="background:${c1}">${artist.charAt(0).toUpperCase()}</div>
+        <div class="artist-info">
+          <h2>${escHtml(artist)}</h2>
+          <span>${songs.length} covers</span>
+        </div>
+      </div>
+    `;
+    const grid = document.createElement('div');
+    grid.className = 'cover-grid';
+    songs.forEach(c => grid.appendChild(createCoverCard(c)));
+    section.appendChild(grid);
+    main.appendChild(section);
+
+    if (songs.length > 0) {
+      const related = getRelated(songs[0], songs.map(s => s.song), 6);
+      if (related.length) renderRecs(main, related, '你可能也有興趣');
+    }
+    return;
+  }
+
+  main.innerHTML = '';
+
+  if (searchQuery && filtered.length > 0) {
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `搜尋結果 <span class="line"></span>`;
+    main.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'cover-grid';
+    filtered.forEach(c => grid.appendChild(createCoverCard(c)));
+    main.appendChild(grid);
+
+    const recs = getRelated(filtered[0], filtered.map(f => f.song), 6);
+    if (recs.length) renderRecs(main, recs, '你可能也有興趣');
+    return;
+  }
+
+  const label = currentFilter === 'hot' ? '熱門翻唱 🔥' : '所有翻唱';
+  const header = document.createElement('div');
+  header.className = 'section-header';
+  header.innerHTML = `${label} <span class="line"></span>`;
+  main.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'cover-grid';
+  filtered.forEach(c => grid.appendChild(createCoverCard(c)));
+  main.appendChild(grid);
+}
+
+function renderRecs(container, recs, title) {
+  const section = document.createElement('div');
+  section.className = 'recs';
+  section.innerHTML = `<div class="section-header">${title} <span class="line"></span></div>`;
+  const grid = document.createElement('div');
+  grid.className = 'recs-grid';
+  recs.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'rec-card';
+    card.innerHTML = `<div class="rec-song">${escHtml(c.song)}</div><div class="rec-artist">${escHtml(c.artist)}</div>`;
+    card.addEventListener('click', () => window.open(c.link, '_blank'));
+    grid.appendChild(card);
+  });
+  section.appendChild(grid);
+  container.appendChild(section);
+}
+
+// Tab clicks
+tabsEl.addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  tabsEl.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentFilter = tab.dataset.filter;
+  render();
+});
+
+// Search
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchQuery = searchInput.value.trim();
+  searchClear.classList.toggle('show', searchQuery.length > 0);
+  searchTimer = setTimeout(render, 200);
+});
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchQuery = '';
+  searchClear.classList.remove('show');
+  render();
+  searchInput.focus();
+});
+
+// Sticky search shadow
+const searchWrap = document.getElementById('searchWrap');
+const observer = new IntersectionObserver(
+  ([e]) => searchWrap.classList.toggle('scrolled', e.intersectionRatio < 1),
+  { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
+);
+observer.observe(searchWrap);
+
+// ===== 表單送出（透過 fetch 到 Apps Script）=====
+function postToSheet(data) {
+  const params = new URLSearchParams(data);
+  return fetch(SCRIPT_URL + '?' + params.toString(), { redirect: 'follow' })
+    .then(r => r.json())
+    .then(j => j.success === true)
+    .catch(() => false);
+}
+
+// Wishlist
+const wishList = document.getElementById('wishList');
+const wishInput = document.getElementById('wishInput');
+const wishBtn = document.getElementById('wishBtn');
+const wishToast = document.getElementById('wishToast');
+
+wishBtn.addEventListener('click', async () => {
+  const text = wishInput.value.trim();
+  if (!text) return;
+  wishBtn.disabled = true;
+  wishBtn.textContent = '送出中⋯';
+  const ok = await postToSheet({ action: 'addWish', song: text });
+  wishBtn.disabled = false;
+  wishBtn.textContent = '許願 ✨';
+  wishInput.value = '';
+  wishToast.textContent = ok ? '已送出許願！🎵' : '送出失敗，請再試一次';
+  wishToast.style.background = ok ? 'var(--success)' : 'var(--danger)';
+  wishToast.style.color = ok ? '#000' : '#fff';
+  wishToast.classList.add('show');
+  setTimeout(() => { wishToast.classList.remove('show'); }, 2000);
+});
+wishInput.addEventListener('keydown', e => { if (e.key === 'Enter') wishBtn.click(); });
+
+// Lesson inquiry
+const lessonBtn = document.getElementById('lessonBtn');
+lessonBtn.addEventListener('click', async () => {
+  const name = document.getElementById('lessonName').value.trim();
+  const contact = document.getElementById('lessonContact').value.trim();
+  const msg = document.getElementById('lessonMsg').value.trim();
+  if (!name || !contact) {
+    wishToast.textContent = '請填寫名字和聯絡方式！';
+    wishToast.style.background = 'var(--danger)';
+    wishToast.style.color = '#fff';
+    wishToast.classList.add('show');
+    setTimeout(() => { wishToast.classList.remove('show'); }, 2000);
+    return;
+  }
+  lessonBtn.disabled = true;
+  lessonBtn.textContent = '送出中⋯';
+  const ok = await postToSheet({ action: 'addLesson', name, contact, message: msg });
+  lessonBtn.disabled = false;
+  lessonBtn.textContent = '送出詢問 →';
+  document.getElementById('lessonName').value = '';
+  document.getElementById('lessonContact').value = '';
+  document.getElementById('lessonMsg').value = '';
+  wishToast.textContent = ok ? '已送出課程詢問！🎤' : '送出失敗，請再試一次';
+  wishToast.style.background = ok ? 'var(--success)' : 'var(--danger)';
+  wishToast.style.color = ok ? '#000' : '#fff';
+  wishToast.classList.add('show');
+  setTimeout(() => { wishToast.classList.remove('show'); }, 2000);
+});
+
+function rebuildUI() {
+  const ac = {};
+  COVERS.forEach(c => { ac[c.artist] = (ac[c.artist] || 0) + 1; });
+  const ta = Object.entries(ac).sort((a, b) => b[1] - a[1]);
+  document.getElementById('statTotal').textContent = COVERS.length;
+  document.getElementById('statArtists').textContent = ta.length;
+  const years = COVERS.map(c => parseInt(c.date)).filter(y => y > 2000);
+  if (years.length) document.getElementById('statSince').textContent = Math.min(...years);
+
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = '';
+  const allT = document.createElement('div');
+  allT.className = 'tab active'; allT.textContent = '全部'; allT.dataset.filter = 'all';
+  tabsEl.appendChild(allT);
+  const hotT = document.createElement('div');
+  hotT.className = 'tab'; hotT.textContent = '熱門 🔥'; hotT.dataset.filter = 'hot';
+  tabsEl.appendChild(hotT);
+  ta.filter(([, c]) => c >= 3).forEach(([artist, count]) => {
+    const t = document.createElement('div');
+    t.className = 'tab';
+    t.innerHTML = `${escHtml(artist)} <span class="count">${count}</span>`;
+    t.dataset.filter = artist;
+    tabsEl.appendChild(t);
+  });
+
+  currentFilter = 'all';
+  render();
+}
+
+// Try to fetch latest covers from Apps Script API
+function loadFromSheet() {
+  if (!SCRIPT_URL || SCRIPT_URL.includes('___REPLACE')) return;
+  fetch(SCRIPT_URL + '?action=getCovers', { redirect: 'follow' })
+    .then(r => r.json())
+    .then(rows => {
+      if (rows && rows.length) { COVERS = rows; rebuildUI(); }
+    })
+    .catch(() => {});
+}
+
+// Init
+render();
+loadFromSheet();
+</script>
+
+</body>
+</html>
