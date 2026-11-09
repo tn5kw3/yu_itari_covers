@@ -593,8 +593,8 @@ function createCoverCard(cover) {
   card.className = 'cover-card fade-in';
   const c1 = hashColor(cover.artist);
   card.innerHTML = `
-    <div class="card-visual" style="background: ${c1}">
-      <div style="font-family:var(--font-display);font-weight:800;font-size:32px;color:rgba(255,255,255,0.08);letter-spacing:-2px;text-transform:uppercase;position:absolute;white-space:nowrap;">${cover.song}</div>
+      <div class="card-visual" style="background: ${cover.img ? 'url('+cover.img+') center/cover no-repeat' : c1}">
+        ${cover.img ? '' : '<div style="font-family:var(--font-display);font-weight:800;font-size:32px;color:rgba(255,255,255,0.08);letter-spacing:-2px;text-transform:uppercase;position:absolute;white-space:nowrap;">'+cover.song+'</div>'}
       ${isNew(cover.date) ? '<span class="card-new">NEW</span>' : ''}
       <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
     </div>
