@@ -685,7 +685,7 @@ function render() {
     main.innerHTML = '';
     noRes.classList.add('show');
     document.getElementById('noResultsText').textContent =
-      `找不到「${searchQuery}」相關的翻唱，但你可以許願讓他知道！`;
+      `找不到「${searchQuery}」相關的翻唱，但你可以許願讓我知道！`;
     const noResultRecs = document.getElementById('noResultRecs');
     noResultRecs.innerHTML = '';
     const recs = [...COVERS].sort(() => Math.random() - 0.5).slice(0, 6);
