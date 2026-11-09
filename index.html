@@ -526,27 +526,36 @@ function formatDate(dateStr) {
 
 /* ── Instagram deep-link helpers ── */
 const _isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const _inIgBrowser = /Instagram/i.test(navigator.userAgent);
+
+function _tryDeepLink(deepUrl, webUrl) {
+  var timer = setTimeout(function() { window.open(webUrl, '_blank'); }, 800);
+  document.addEventListener('visibilitychange', function handler() {
+    if (document.hidden) clearTimeout(timer);
+    document.removeEventListener('visibilitychange', handler);
+  });
+  window.location.href = deepUrl;
+}
 
 function openIgProfile(username, e) {
   if (e) e.preventDefault();
-  if (_isMobile) {
-    window.location.href = 'instagram://user?username=' + username;
-    setTimeout(() => { window.open('https://www.instagram.com/' + username + '/', '_blank'); }, 800);
+  var webUrl = 'https://www.instagram.com/' + username + '/';
+  if (_isMobile && !_inIgBrowser) {
+    _tryDeepLink('instagram://user?username=' + username, webUrl);
   } else {
-    window.open('https://www.instagram.com/' + username + '/', '_blank');
+    window.open(webUrl, '_blank');
   }
 }
 
 function openIgReel(webUrl, e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
-  if (_isMobile) {
+  if (_isMobile && !_inIgBrowser) {
     var m = webUrl.match(/\/reel(?:s)?\/([A-Za-z0-9_-]+)/);
     if (m) {
-      window.location.href = 'instagram://reels/' + m[1] + '/';
+      _tryDeepLink('instagram://reels/' + m[1] + '/', webUrl);
     } else {
-      window.location.href = webUrl.replace('https://www.instagram.com', 'instagram:/');
+      window.open(webUrl, '_blank');
     }
-    setTimeout(() => { window.open(webUrl, '_blank'); }, 800);
   } else {
     window.open(webUrl, '_blank');
   }
