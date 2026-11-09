@@ -527,43 +527,34 @@ function formatDate(dateStr) {
 /* ── Instagram deep-link helpers ── */
 const _isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const _inIgBrowser = /Instagram/i.test(navigator.userAgent);
-var _lastDeepLink = 0;
-
-function _tryDeepLink(deepUrl, webUrl) {
-  var now = Date.now();
-  if (now - _lastDeepLink < 3000) {
-    window.open(webUrl, '_blank');
-    return;
-  }
-  _lastDeepLink = now;
-
-  var timer = setTimeout(function() { window.open(webUrl, '_blank'); }, 1200);
-  document.addEventListener('visibilitychange', function handler() {
-    if (document.hidden) clearTimeout(timer);
-    document.removeEventListener('visibilitychange', handler);
-  });
-  window.location.href = deepUrl;
-}
 
 function openIgProfile(username, e) {
   if (e) e.preventDefault();
-  var webUrl = 'https://www.instagram.com/' + username + '/';
+  var url = 'https://www.instagram.com/' + username + '/';
   if (_isMobile && !_inIgBrowser) {
-    _tryDeepLink('instagram://user?username=' + username, webUrl);
+    // iOS Universal Links: 用 <a> 點擊觸發，系統會自動開 IG app
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   } else {
-    window.open(webUrl, '_blank');
+    window.open(url, '_blank');
   }
 }
 
 function openIgReel(webUrl, e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (_isMobile && !_inIgBrowser) {
-    var m = webUrl.match(/\/reel(?:s)?\/([A-Za-z0-9_-]+)/);
-    if (m) {
-      _tryDeepLink('instagram://reels/' + m[1] + '/', webUrl);
-    } else {
-      window.open(webUrl, '_blank');
-    }
+    var a = document.createElement('a');
+    a.href = webUrl;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   } else {
     window.open(webUrl, '_blank');
   }
