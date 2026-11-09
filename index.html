@@ -7,6 +7,30 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
 </head>
 <body>
+<!-- IG 內建瀏覽器提示 -->
+<style>
+  #igNotice{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);
+    align-items:center;justify-content:center;padding:24px;}
+  #igNotice .box{background:var(--bg-card);color:#fff;border-radius:16px;padding:28px 24px;
+    max-width:320px;text-align:center;line-height:1.7;}
+  #igNotice .title{font-size:18px;font-weight:700;margin-bottom:10px;}
+  #igNotice .hint{font-size:14px;color:#aaa;margin-bottom:20px;}
+  #igNotice button{background:#fff;color:#000;border:none;border-radius:999px;
+    padding:10px 32px;font-size:15px;font-weight:600;}
+</style>
+<div id="igNotice">
+  <div class="box">
+    <div class="title">建議使用外部瀏覽器</div>
+    <div class="hint">使用起來更順暢，觀看 Reels 也能直接跳到 IG app<br>
+      點右上角 <b>⋯</b> → 選「在外部瀏覽器開啟」</div>
+    <button onclick="document.getElementById('igNotice').style.display='none'">我知道了</button>
+  </div>
+</div>
+<script>
+  if (/Instagram/i.test(navigator.userAgent)) {
+    document.getElementById('igNotice').style.display = 'flex';
+  }
+</script>
 <style>
 /* Unified palette — no gradients, same in all modes */
 :root {
