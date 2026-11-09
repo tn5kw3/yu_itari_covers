@@ -527,9 +527,17 @@ function formatDate(dateStr) {
 /* ── Instagram deep-link helpers ── */
 const _isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const _inIgBrowser = /Instagram/i.test(navigator.userAgent);
+var _lastDeepLink = 0;
 
 function _tryDeepLink(deepUrl, webUrl) {
-  var timer = setTimeout(function() { window.open(webUrl, '_blank'); }, 800);
+  var now = Date.now();
+  if (now - _lastDeepLink < 3000) {
+    window.open(webUrl, '_blank');
+    return;
+  }
+  _lastDeepLink = now;
+
+  var timer = setTimeout(function() { window.open(webUrl, '_blank'); }, 1200);
   document.addEventListener('visibilitychange', function handler() {
     if (document.hidden) clearTimeout(timer);
     document.removeEventListener('visibilitychange', handler);
