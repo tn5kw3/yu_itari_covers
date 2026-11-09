@@ -547,16 +547,18 @@ function openIgProfile(username, e) {
 
 function openIgReel(webUrl, e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
+  var m = webUrl.match(/\/(?:reel|reels|p)\/([A-Za-z0-9_-]+)/);
+  var url = m ? 'https://www.instagram.com/p/' + m[1] + '/' : webUrl;
   if (_isMobile && !_inIgBrowser) {
     var a = document.createElement('a');
-    a.href = webUrl;
+    a.href = url;
     a.target = '_blank';
     a.rel = 'noopener';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   } else {
-    window.open(webUrl, '_blank');
+    window.open(url, '_blank');
   }
 }
 
